@@ -81,8 +81,8 @@ onMounted(() => {
 
 <template>
   <fieldset class="oscilloscope">
-    <legend v-once>
-      DISPLAY
+    <legend>
+      {{ "振幅：" + store.amplitude + "　周波数：" + store.frequency + "　Y軸カットオフ：" + store.cutoff + "　ノイズ：" + store.noiseLevel }}
     </legend>
     <canvas
       id="oscilloscopeCanvas"

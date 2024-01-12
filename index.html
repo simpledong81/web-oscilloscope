@@ -1,62 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
+<html lang="ja">
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="application-name" content="Web oscilloscope">
-    <meta name="author" content="super16">
+    <meta name="author" content="napir">
     <meta name="description" content="Web oscilloscope application made with Vue.js">
     <meta name="keywords" content="CSS, HTML, oscilloscope, JavaScript, Vue.js, canvas">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link href="/css/style.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap"
+          rel="stylesheet">
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="manifest" href="/manifest.webmanifest">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <style>
-      :root {
-        --small: 16px;
-        --medium: 18px;
-        --large: 24px;
-        --extra-large: 32px;
-        --red: oklch(65% 0.29 27.5);
-        --red-fallback: red;
-        --violet: oklch(58% 0.28 300);
-        --violet-fallback: #9832ff;
-      }
-      @font-face {
-        font-family: 'Press Start 2P';
-        font-style: normal;
-        font-display: swap;
-        font-weight: 400;
-        src: local(''),
-          url('/fonts/press-start-2p-v14-latin-regular.woff2') format('woff2'),
-          url('/fonts/press-start-2p-v14-latin-regular.woff') format('woff');
-      }
-      body {
-        background: linear-gradient(to right, black, rgb(0, 0, 50)),
-          url("/img/noise.svg");
-        color: white;
-        display: grid;
-        gap: var(--large);
-        grid-auto-rows: auto 1fr auto;
-        font-family: 'Press Start 2P', normal;
-        margin: 0;
-        min-height: 100%;
-        padding: 0;
-      }
-      html {
-        height: 100%;
-      }
+        :root {
+            --small: 16px;
+            --medium: 18px;
+            --large: 24px;
+            --extra-large: 32px;
+            --red: oklch(65% 0.29 27.5);
+            --red-fallback: red;
+            --violet: oklch(58% 0.28 300);
+            --violet-fallback: #9832ff;
+        }
+
+        @font-face {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-style: normal;
+            font-display: swap;
+            font-weight: 400;
+            src: local('');
+        }
+
+        body {
+            background: linear-gradient(to right, black, rgb(0, 0, 50)), url("/img/noise.svg");
+            color: white;
+            display: grid;
+            gap: var(--large);
+            grid-auto-rows: auto 1fr auto;
+            font-family: 'Noto Sans JP', normal;
+            margin: 0;
+            min-height: 100%;
+            padding: 0;
+        }
+
+        html {
+            height: 100%;
+        }
     </style>
-    <title>Web Oscilloscope</title>
+    <title>Ｗｅｂオシロスコープ</title>
     <script type="module" src="/src/main.ts"></script>
-  </head>
-  <body>
-    <header>
-      <h1>Web Oscilloscope</h1>
-    </header>
-    <main id="app"></main>
-    <footer>made by <a href="https://github.com/super16">super16</a></footer>
-  </body>
+</head>
+<body>
+<header>
+    <h1>Ｗｅｂオシロスコープ</h1>
+</header>
+<main id="app"></main>
+<footer>
+    Copyright © 2023- <a href="https://www.enapir.com">Napir</a> All Rights Reserved.
+</footer>
+</body>
 </html>

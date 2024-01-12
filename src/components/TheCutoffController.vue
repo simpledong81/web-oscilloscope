@@ -18,11 +18,12 @@ const cutoffLevelValue = computed<number>({
 <template>
   <fieldset class="controller">
     <legend v-once>
-      CUTOFF
+      カットオフ
     </legend>
     <RangeController
       v-model:value="cutoffLevelValue"
       :controller-id="`cutoffLevel`"
+      :controller-label="`Y軸`"
       :max="store.heightLimit"
       :min="0"
     />

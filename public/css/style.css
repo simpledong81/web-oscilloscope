@@ -8,9 +8,13 @@ fieldset > legend {
 }
 
 footer {
-  margin-right: var(--large);
-  text-align: right;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
   font-size: small;
+  color: #ffffff;
+  position: fixed;
+  background-color: #000000;
 }
 
 footer > a {
@@ -56,11 +60,11 @@ main {
     }
 }
 
-@media only screen 
-  and (min-device-width: 414px) 
-  and (max-device-width: 736px) 
+@media only screen
+  and (min-device-width: 414px)
+  and (max-device-width: 736px)
   and (-webkit-min-device-pixel-ratio: 3)
-  and (orientation: portrait) { 
+  and (orientation: portrait) {
     main {
       margin: 0 var(--medium);
     }

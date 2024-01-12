@@ -38,25 +38,45 @@ const waveChoiceValue = computed<number>({
     store.waveChoice = value;
   },
 });
+const waveTypeLabel = (waveType) => {
+  let label = "";
+  switch (waveType) {
+    case "sine":
+      label = "正弦波";
+      break;
+    case "square":
+      label = "方形波";
+      break;
+    case "triangular":
+      label = "三角波";
+      break;
+    case "saw":
+      label = "ノコギリ波";
+      break;
+    default:
+      break;
+  }
+  return label;
+}
 </script>
 
 <template>
   <fieldset class="controller">
     <legend v-once>
-      WAVE GENERATOR
+      波形ジェネレーター
     </legend>
     <div class="controller__faders">
       <RangeController
         v-model:value="amplitudeValue"
         :controller-id="`amplitude`"
-        :controller-label="`AMPLITUDE`"
+        :controller-label="`振幅`"
         :max="store.heightLimit"
         :min="0"
       />
       <RangeController
         v-model:value="frequencyValue"
         :controller-id="`frequency`"
-        :controller-label="`FREQUENCY`"
+        :controller-label="`周波数`"
         :max="store.widthLimit"
         :min="1"
       />
@@ -76,7 +96,7 @@ const waveChoiceValue = computed<number>({
           :value="k"
           class="controller__radio"
         >
-        {{ v }}
+        {{ waveTypeLabel(v) }}
       </label>
     </div>
   </fieldset>

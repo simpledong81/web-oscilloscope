@@ -18,11 +18,12 @@ const noiseLevelValue = computed<number>({
 <template>
   <fieldset class="controller">
     <legend v-once>
-      NOISE
+      ノイズ
     </legend>
     <RangeController
       v-model:value="noiseLevelValue"
       :controller-id="`noiseLevel`"
+      :controller-label="`レベル`"
       :max="30"
       :min="0"
     />

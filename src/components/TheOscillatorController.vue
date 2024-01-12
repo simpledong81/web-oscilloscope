@@ -38,7 +38,7 @@ const waveChoiceValue = computed<number>({
     store.waveChoice = value;
   },
 });
-const waveTypeLabel = (waveType) => {
+const waveTypeLabel = (waveType: string) => {
   let label = "";
   switch (waveType) {
     case "sine":

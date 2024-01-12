@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport'/>
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link href="assets/plotly_live.css" rel="stylesheet">
+    <script type="text/javascript" src="assets/plotly-latest.min.js"></script>
+    <script type="text/javascript" src="assets/plotly_live.js"></script>
+</head>
+
+<body>
+<header>
+    <h1>Ｗｅｂオシロスコープ</h1>
+</header>
+
+<main>
+    <fieldset class="oscilloscope">
+        <legend style="width: 800px;">
+            XYZーサンプリングーレジェンド
+            <button class="btn btn-primary btn-chart"
+                    id="run_stop"
+                    type="button"
+                    name="run_stop"
+                    onClick="run_stopClick()"
+                    title="チャート更新の停止/開始">
+                停止
+            </button>
+        </legend>
+        <div class="chart" id="chart-wo">
+            <div class="controllers">
+                <fieldset class="controller">
+                    <!-- https://www.techeyesonline.com/glossary/detail/%E3%83%88%E3%83%AA%E3%82%AC%E3%83%A2%E3%83%BC%E3%83%89/ -->
+                    <legend>トリガモード</legend>
+                    <div class="controller__radios">
+                        <label class="radio__label" for="trg_auto">
+                            <input id="trg_auto"
+                                   type="radio"
+                                   name="trg_mode"
+                                   class="controller__radio"
+                                   onClick="trg_autoClick()"
+                            >
+                            オート(Auto)
+                        </label>
+                        <label class="radio__label" for="trg_normal">
+                            <input id="trg_normal"
+                                   type="radio"
+                                   name="trg_mode"
+                                   class="controller__radio"
+                                   onClick="trg_normalClick()"
+                            >
+                            ノーマル(Normal)
+                        </label>
+                        <label class="radio__label" for="trg_single">
+                            <input id="trg_single"
+                                   type="radio"
+                                   name="trg_mode"
+                                   class="controller__radio"
+                                   onClick="trg_singleClick()"
+                            >
+                            シングル(Single)
+                        </label>
+                    </div>
+                </fieldset>
+                <fieldset class="controller">
+                    <!-- https://www.techeyesonline.com/glossary/detail/%E3%83%88%E3%83%AA%E3%82%AC%E3%82%B9%E3%83%AD%E3%83%BC%E3%83%97/ -->
+                    <legend>トリガスロープ</legend>
+                    <div class="controller__radios">
+                        <label class="radio__label" for="trg_rise">
+                            <input id="trg_rise"
+                                   type="radio"
+                                   name="trg_dir"
+                                   class="controller__radio"
+                                   onClick="trg_riseClick()"
+                            >
+                            立ち上がり(Rise)
+                        </label>
+                        <label class="radio__label" for="trg_fall">
+                            <input id="trg_fall"
+                                   type="radio"
+                                   name="trg_dir"
+                                   class="controller__radio"
+                                   onClick="trg_fallClick()"
+                            >
+                            立ち下がり(Fall)
+                        </label>
+                        <label class="radio__label" for="trg_both">
+                            <input id="trg_both"
+                                   type="radio"
+                                   name="trg_dir"
+                                   class="controller__radio"
+                                   onClick="trg_bothClick()"
+                            >
+                            両端(Both)
+                        </label>
+                    </div>
+                </fieldset>
+                <fieldset class="controller">
+                    <legend>トリガチャネル</legend>
+                    <div class="controller__radios">
+                        <label class="radio__label" for="trg_ch0">
+                            <input id="trg_ch0"
+                                   type="radio"
+                                   name="trg_ch"
+                                   class="controller__radio"
+                                   onClick="trg_ch0Click()"
+                            >
+                            チャネル 0
+                        </label>
+                        <label class="radio__label" for="trg_ch1">
+                            <input id="trg_ch1"
+                                   type="radio"
+                                   name="trg_ch"
+                                   class="controller__radio"
+                                   onClick="trg_ch1Click()"
+                            >
+                            チャネル 1
+                        </label>
+                        <label class="radio__label" for="trg_ch2">
+                            <input id="trg_ch2"
+                                   type="radio"
+                                   name="trg_ch"
+                                   class="controller__radio"
+                                   onClick="trg_ch2Click()"
+                            >
+                            チャネル 2
+                        </label>
+                    </div>
+                </fieldset>
+                <fieldset class="controller">
+                    <!-- https://www.techeyesonline.com/glossary/detail/%E3%83%88%E3%83%AA%E3%82%AC%E3%83%AC%E3%83%99%E3%83%AB/ -->
+                    <legend>トリガレベル[V]</legend>
+                    <div class="controller__faders">
+                        <label for="t_level">
+                            <input id="t_level"
+                                   name="t_level"
+                                   type="number"
+                                   class="input_number"
+                                   onChange="l_changeEvent()"
+                            />
+                        </label>
+                        <button class="btn btn-primary w-btn"
+                                id="l_plusplus"
+                                type="button"
+                                name="l_plusplu"
+                                onClick="l_plusplusClick()"
+                                title="トリガーレベルを上げます"
+                        >
+                            ++
+                        </button>
+                        <button class="btn btn-primary w-btn"
+                                id="l_plus"
+                                type="button"
+                                name="l_plus"
+                                onClick="l_plusClick()"
+                                title="トリガーレベルを少し上げます"
+                        >
+                            +
+                        </button>
+                        <button class="btn btn-primary w-btn"
+                                id="l_minus"
+                                type="button"
+                                name="l_minus"
+                                onClick="l_minusClick()"
+                                title="トリガーレベルを少し下げます">
+                            -
+                        </button>
+                        <button class="btn btn-primary w-btn"
+                                id="l_minusminus"
+                                type="button"
+                                name="l_minusminus"
+                                onClick="l_minusminusClick()"
+                                title="トリガーレベルを下げます">
+                            --
+                        </button>
+                    </div>
+                </fieldset>
+                <fieldset class="controller">
+                    <!-- https://www.techeyesonline.com/glossary/detail/%E3%83%88%E3%83%AA%E3%82%AC%E3%83%9D%E3%82%B8%E3%82%B7%E3%83%A7%E3%83%B3/ -->
+                    <legend>トリガポジション[%]</legend>
+                    <div class="controller__faders">
+                        <label for="t_pos">
+                            <input id="t_pos"
+                                   name="t_pos"
+                                   type="number"
+                                   class="input_number"
+                                   onChange="t_changeEvent()"
+                            />
+                        </label>
+                        <button class="btn btn-primary w-btn"
+                                id="t_leftleft"
+                                type="button"
+                                name="t_leftleft"
+                                onClick="t_leftleftClick()"
+                                title="トリガーポーションを左に移動します"
+                        >
+                            <<
+                        </button>
+                        <button class="btn btn-primary w-btn"
+                                id="t_left"
+                                type="button"
+                                name="t_left"
+                                onClick="t_leftClick()"
+                                title="トリガーポーションを少し左に移動します"
+                        >
+                            <
+                        </button>
+                        <button class="btn btn-primary w-btn"
+                                id="t_right"
+                                type="button"
+                                name="t_right"
+                                onClick="t_rightClick()"
+                                title="トリガーポーションを少し右に移動します">
+                            >
+                        </button>
+                        <button class="btn btn-primary w-btn"
+                                id="t_rightright"
+                                type="button"
+                                name="t_rightright"
+                                onClick="t_rightrightClick()"
+                                title="トリガーポーションを右に移動します">
+                            >>
+                        </button>
+                    </div>
+                </fieldset>
+                <hr/>
+                <fieldset class="controller">
+                    <!-- https://www.techeyesonline.com/glossary/detail/%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AA%E3%83%B3%E3%82%B0%E3%83%AC%E3%83%BC%E3%83%88/ -->
+                    <legend>サンプリングレート[s]</legend>
+                    <div class="controller__faders">
+                        <label for="s_rate">
+                            <input id="s_rate"
+                                   name="s_rate"
+                                   type="number"
+                                   class="input_number"
+                                   onChange="s_changeEvent()"
+                            />
+                        </label>
+                        <button class="btn btn-primary w-btn"
+                                id="s_rateff"
+                                type="button"
+                                name="s_rateff"
+                                onClick="s_fastfastClick()"
+                                title="サンプリングレートを上げます"
+                        >
+                            ++
+                        </button>
+                        <button class="btn btn-primary w-btn"
+                                id="s_ratef"
+                                type="button"
+                                name="s_ratef"
+                                onClick="s_fastClick()"
+                                title="サンプリングレートを少し上げます"
+                        >
+                            +
+                        </button>
+                        <button class="btn btn-primary w-btn"
+                                id="s_rates"
+                                type="button"
+                                name="s_rates"
+                                onClick="s_slowClick()"
+                                title="サンプリングレートを少し下げます">
+                            -
+                        </button>
+                        <button class="btn btn-primary w-btn"
+                                id="s_ratess"
+                                type="button"
+                                name="s_ratess"
+                                onClick="s_slowslowClick()"
+                                title="サンプリングレートを下げます">
+                            --
+                        </button>
+                    </div>
+                </fieldset>
+                <fieldset class="controller">
+                    <legend>チャート更新レート[s]</legend>
+                    <div class="controller__faders">
+                        <label for="u_rate">
+                            <input id="u_rate"
+                                   name="u_rate"
+                                   type="number"
+                                   class="input_number"
+                                   onChange="v_changeEvent()"
+                            />
+                        </label>
+                        <button class="btn btn-primary w-btn"
+                                id="u_rateff"
+                                type="button"
+                                name="u_rateff"
+                                onClick="u_fastfastClick()"
+                                title="チャート更新レートを上げます"
+                        >
+                            ++
+                        </button>
+                        <button class="btn btn-primary w-btn"
+                                id="u_ratef"
+                                type="button"
+                                name="u_ratef"
+                                onClick="u_fastClick()"
+                                title="チャート更新レートを少し上げます"
+                        >
+                            +
+                        </button>
+                        <button class="btn btn-primary w-btn"
+                                id="u_rates"
+                                type="button"
+                                name="u_rates"
+                                onClick="u_slowClick()"
+                                title="チャート更新レートを少し下げます">
+                            -
+                        </button>
+                        <button class="btn btn-primary w-btn"
+                                id="u_ratess"
+                                type="button"
+                                name="u_ratess"
+                                onClick="u_slowslowClick()"
+                                title="チャート更新レートを下げます">
+                            --
+                        </button>
+                    </div>
+                </fieldset>
+                <hr/>
+                <fieldset class="controller">
+                    <legend>チャート設定</legend>
+                    <div class="controller__faders">
+                        <label class="side-label" title="White">チャネル 0</label>
+                        <label for="chk_ch0">
+                            <input class="form-check-input"
+                                   id="chk_ch0"
+                                   type="checkbox"
+                                   name="chk_ch0"
+                                   onClick="chk_ch0Click()"
+                                   title="チャネル 0の表示/非表示"
+                            />
+                            on
+                        </label>
+                        <button class="btn btn-primary w-btn"
+                                id="y0_moveup"
+                                type="button"
+                                name="y0_moveup"
+                                onClick="y0_moveupClick()"
+                                title="チャンネル0を上に移動します"
+                        >
+                            上に
+                        </button>
+                        <button class="btn btn-primary w-btn"
+                                id="y0_movedown"
+                                type="button"
+                                name="y0_movedown"
+                                onClick="y0_movedownClick()"
+                                title="チャンネル0を下に移動します"
+                        >
+                            下に
+                        </button>
+                        <label class="side-label shift_right_Y_axis"
+                               title="Y軸スケール">
+                            Y軸
+                        </label>
+                    </div>
+                    <div class="controller__faders">
+                        <label class="side-label" title="Yellow">チャネル 1</label>
+                        <label for="chk_ch1">
+                            <input class="form-check-input"
+                                   id="chk_ch1"
+                                   type="checkbox"
+                                   name="chk_ch1"
+                                   onClick="chk_ch1Click()"
+                                   title="チャネル 1の表示/非表示"
+                            />
+                            on
+                        </label>
+                        <button class="btn btn-primary w-btn"
+                                id="y1_moveup"
+                                type="button"
+                                name="y1_moveup"
+                                onClick="y1_moveupClick()"
+                                title="チャンネル1を上に移動します"
+                        >
+                            上に
+                        </button>
+                        <button class="btn btn-primary w-btn"
+                                id="y1_movedown"
+                                type="button"
+                                name="y1_movedown"
+                                onClick="y1_movedownClick()"
+                                title="チャンネル1を下に移動します"
+                        >
+                            下に
+                        </button>
+                        <button class="btn btn-primary w-btn shift_right"
+                                id="y_plus"
+                                type="button"
+                                name="y_plus"
+                                onClick="y_plusClick()"
+                                title="Y軸をズームアウトします"
+                        >
+                            ><
+                        </button>
+                        <button class="btn btn-primary w-btn shift_right"
+                                id="y_moveup"
+                                type="button"
+                                name="y_moveup"
+                                onClick="y_moveupClick()"
+                                title="全てのチャンネルを上に移動します"
+                        >
+                            上に
+                        </button>
+                    </div>
+                    <div class="controller__faders">
+                        <label class="side-label" title="Lime">チャネル 2</label>
+                        <label for="chk_ch2">
+                            <input class="form-check-input"
+                                   id="chk_ch2"
+                                   type="checkbox"
+                                   name="chk_ch2"
+                                   onClick="chk_ch2Click()"
+                                   title="チャネル 2の表示/非表示"
+                            />
+                            on
+                        </label>
+                        <button class="btn btn-primary w-btn"
+                                id="y2_moveup"
+                                type="button"
+                                name="y2_moveup"
+                                onClick="y2_moveupClick()"
+                                title="チャンネル2を上に移動します"
+                        >
+                            上に
+                        </button>
+                        <button class="btn btn-primary w-btn"
+                                id="y2_movedown"
+                                type="button"
+                                name="y2_movedown"
+                                onClick="y2_movedownClick()"
+                                title="チャンネル2を下に移動します"
+                        >
+                            下に
+                        </button>
+                        <button class="btn btn-primary w-btn shift_right"
+                                id="y_minus"
+                                type="button"
+                                name="y_minus"
+                                onClick="y_minusClick()"
+                                title="Y軸をズームインします"
+                        >
+                            <>
+                        </button>
+                        <button class="btn btn-primary w-btn shift_right"
+                                id="y_movedown"
+                                type="button"
+                                name="y_movedown"
+                                onClick="y_movedownClick()"
+                                title="全てのチャンネルを下に移動します"
+                        >
+                            下に
+                        </button>
+                    </div>
+                    <div class="controller__faders">
+                        <label class="side-label">X軸</label>
+                        <button class="btn btn-primary w-btn"
+                                id="x_plus"
+                                type="button"
+                                name="x_plus"
+                                onClick="x_plusClick()"
+                                title="X軸をズームアウトします"
+                        >
+                            ><
+                        </button>
+                        <button class="btn btn-primary w-btn"
+                                id="x_minus"
+                                type="button"
+                                name="x_minus"
+                                onClick="x_minusClick()"
+                                title="X軸をズームインします"
+                        >
+                            <>
+                        </button>
+                        <button class="btn btn-primary w-btn"
+                                id="x_moveleft"
+                                type="button"
+                                name="x_moveleft"
+                                onClick="x_moveleftClick()"
+                                title="X軸を左に移動します"
+                        >
+                            <
+                        </button>
+                        <button class="btn btn-primary w-btn"
+                                id="x_moveright"
+                                type="button"
+                                name="x_moveright"
+                                onClick="x_moverightClick()"
+                                title="X軸を右に移動します"
+                        >
+                            <
+                        </button>
+                    </div>
+                </fieldset>
+                <hr/>
+                <fieldset class="controller">
+                    <div class="controller__faders">
+                        <label class="side-label">チャート構成</label>
+                        <button class="btn btn-primary shift_down"
+                                id="save_setup"
+                                type="button"
+                                name="save_setup"
+                                onClick="save_setupClick()"
+                                title="設定をサーバーに保存します"
+                        >
+                            保存
+                        </button>
+                        <button class="btn btn-primary shift_down"
+                                id="reload_setup"
+                                type="button"
+                                name="reload_setup"
+                                onClick="reload_setupClick()"
+                                title="サーバーからセットアップをリロードします"
+                        >
+                            リロード
+                        </button>
+                        <button class="btn btn-primary shift_down"
+                                id="init_setup"
+                                type="button"
+                                name="init_setup"
+                                onClick="init_setupClick()"
+                                title="サーバーからデフォルト設定をロードします"
+                        >
+                            デフォルト
+                        </button>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </fieldset>
+</main>
+
+<footer>
+    Copyright © 2023- <a href="https://www.enapir.com">Napir</a> All Rights Reserved.
+</footer>
+</body>
+</html>

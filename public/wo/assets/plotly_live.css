@@ -1,0 +1,336 @@
+:root {
+    --small: 16px;
+    --medium: 18px;
+    --large: 24px;
+    --extra-large: 32px;
+    --red: oklch(65% 0.29 27.5);
+    --red-fallback: red;
+    --violet: oklch(58% 0.28 300);
+    --violet-fallback: #9832ff;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    background: linear-gradient(to right, black, rgb(0, 0, 50)), url("img/noise.svg");
+    color: white;
+    display: grid;
+    gap: var(--large);
+    grid-auto-rows: auto 1fr auto;
+    font-family: "Helvetica Neue", "Helvetica", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Arial", "Yu Gothic", "Meiryo", sans-serif;;
+    margin: 0;
+    min-height: 100%;
+    padding: 0;
+}
+
+.h1 {
+    position: relative;
+    left: 100px;
+    font-size: 20px;
+}
+
+.button {
+    position: relative;
+    left: 30px;
+}
+
+button:not(:disabled) {
+    cursor: pointer;
+}
+
+.side_button {
+    position: relative;
+    border: 0px;
+}
+
+.chart {
+    position: relative;
+    display: flex;
+}
+
+.test {
+    width: 100%;
+}
+
+.input_number {
+    position: relative;
+    top: 3px;
+    height: 25px;
+    width: 5em;
+    text-align: right;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.w-btn {
+    width: 40px;
+    margin-left: 0px !important;
+    margin-top: 2px !important;
+    padding: 0px !important;
+}
+
+.side-label {
+    width: 5em;
+    margin-top: 2px;
+}
+
+.radio_btn {
+    position: relative;
+    top: 3px !important;
+}
+
+.shift_right {
+    position: relative !important;
+    left: 40px !important;
+}
+
+.shift_right_Y_axis {
+    position: relative !important;
+    left: 60px !important;
+}
+
+.shift_down {
+    position: relative !important;
+    top: 3px !important;
+}
+
+.btn-chart {
+    float: right;
+    width: 200px;
+}
+
+fieldset {
+    border: 0;
+}
+
+fieldset > legend {
+    color: var(--violet-fallback);
+    color: var(--violet);
+}
+
+footer {
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    font-size: small;
+    color: #ffffff;
+    position: fixed;
+    background-color: #000000;
+}
+
+footer > a {
+    color: white;
+    text-decoration: none;
+}
+
+footer > a:hover {
+    color: var(--red-fallback);
+    color: var(--red);
+}
+
+header {
+    margin-top: var(--large);
+    text-align: center;
+}
+
+header h1 {
+    color: white;
+    font-size: var(--medium);
+}
+
+main {
+    display: grid;
+    grid-auto-rows: auto;
+    justify-content: center;
+    row-gap: var(--small);
+}
+
+.controller {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.plot-container {
+    border: 3px solid #c0c0c0;
+}
+
+.controller__faders {
+    /*display: flex;*/
+    /*flex-direction: column;*/
+}
+
+.radio__label {
+    margin-right: 10px;
+}
+
+.radio__label:hover {
+    cursor: pointer;
+}
+
+.controller__radio {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 2px solid white;
+    border-radius: 50%;
+    height: var(--small);
+    outline: none;
+    position: relative;
+    width: var(--small);
+}
+
+.controller__radio:hover {
+    background-color: var(--red-fallback);
+    background-color: var(--red);
+    cursor: pointer;
+}
+
+.controller__radio:checked {
+    border: 6px solid var(--red-fallback);
+    border: 6px solid var(--red);
+}
+
+.controller__radio:focus-visible {
+    border: 6px solid var(--violet-fallback);
+    border: 6px solid var(--violet);
+}
+
+.controller__radios {
+    display: flex;
+    /*flex-direction: column;*/
+}
+
+@media only screen
+and (min-device-width: 768px)
+and (max-device-width: 4800px)
+and (orientation: portrait)
+and (-webkit-min-device-pixel-ratio: 1) {
+    .controller__faders {
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .controller__radios {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        margin: var(--small);
+    }
+
+    .controller__radios > label {
+        margin-right: var(--extra-large);
+    }
+}
+
+label > input[type=range] {
+    accent-color: var(--red-fallback);
+    accent-color: var(--red);
+    background: black;
+    border: 2px solid var(--red-fallback);
+    border: 2px solid var(--red);
+    height: 5px;
+    margin-top: 10px;
+    outline: none;
+}
+
+label > input[type=range]:focus-visible {
+    border-color: var(--violet-fallback);
+    border-color: var(--violet);
+}
+
+/* for Chrome/Safari */
+label > input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    background: black;
+    border: 1px solid white;
+    border-radius: 2px;
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+}
+
+label > input[type=range]::-webkit-slider-thumb:hover {
+    background: var(--red-fallback);
+    background: var(--red);
+}
+
+/* for Firefox */
+label > input[type=range]::-moz-range-thumb {
+    background: black;
+    border: 2px solid white;
+    border-radius: 2px;
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+}
+
+label > input[type=range]::-moz-range-thumb:hover {
+    background: var(--red-fallback);
+    background: var(--red);
+}
+
+@media only screen
+and (min-device-width: 768px)
+and (max-device-width: 1024px)
+and (-webkit-min-device-pixel-ratio: 1) {
+    label {
+        margin: 20px;
+    }
+}
+
+@media only screen
+and (min-device-width: 768px)
+and (max-device-width: 1024px)
+and (-webkit-min-device-pixel-ratio: 1) {
+    header h1 {
+        font-size: 28px;
+    }
+}
+
+@media only screen
+and (min-device-width: 414px)
+and (max-device-width: 736px)
+and (-webkit-min-device-pixel-ratio: 3)
+and (orientation: portrait) {
+    main {
+        margin: 0 var(--medium);
+    }
+}
+
+@media only screen
+and (min-device-width: 768px)
+and (max-device-width: 1024px)
+and (orientation: portrait)
+and (-webkit-min-device-pixel-ratio: 1) {
+    main {
+        padding: 0 var(--extra-large);
+    }
+}
+
+@media screen
+and (min-device-width: 1025px)
+and (max-device-width: 4800px)
+and (-webkit-min-device-pixel-ratio: 1) {
+    header h1 {
+        font-size: var(--extra-large);
+    }
+
+    main {
+        align-items: initial;
+        display: flex;
+        flex-direction: row;
+        padding: 0;
+    }
+}
